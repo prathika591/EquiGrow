@@ -1,0 +1,845 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Equigrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme: dark;
+  --ground:#0D0C0A; --surface:#171510; --raised:#211E17; --line:#34302460;
+  --line-strong:#3E3829;
+  --text:#F2ECDD; --muted:#A69D86; --faint:#6F6857;
+  --gold:#D6B25E; --gold-hi:#F3E1A0; --gold-lo:#9C7A2E; --on-gold:#15120B;
+  --mint:#7FD1A6; --mint-bg:#7FD1A61A;
+  --amber:#EBA84A; --amber-bg:#EBA84A1C;
+  --red:#E57A64; --red-bg:#E57A641C;
+  --shadow:0 10px 30px #00000066;
+  --display:"Marcellus","Optima","Candara",Georgia,serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme: light;
+    --ground:#F7F3EA; --surface:#FFFDF8; --raised:#F0E9DA; --line:#DDD3BD80; --line-strong:#D6CAAE;
+    --text:#1B1811; --muted:#6A614C; --faint:#9A907A;
+    --gold:#A8812B; --gold-hi:#C99A3A; --gold-lo:#7D5F1E; --on-gold:#FFFBF0;
+    --mint:#2F8F5E; --mint-bg:#2F8F5E14; --amber:#B7751A; --amber-bg:#B7751A14; --red:#B8492F; --red-bg:#B8492F12;
+    --shadow:0 8px 24px #5A4A2218;
+  }
+}
+:root[data-theme="light"]{
+  color-scheme: light;
+  --ground:#F7F3EA; --surface:#FFFDF8; --raised:#F0E9DA; --line:#DDD3BD80; --line-strong:#D6CAAE;
+  --text:#1B1811; --muted:#6A614C; --faint:#9A907A;
+  --gold:#A8812B; --gold-hi:#C99A3A; --gold-lo:#7D5F1E; --on-gold:#FFFBF0;
+  --mint:#2F8F5E; --mint-bg:#2F8F5E14; --amber:#B7751A; --amber-bg:#B7751A14; --red:#B8492F; --red-bg:#B8492F12;
+  --shadow:0 8px 24px #5A4A2218;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--text);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+.app{max-width:520px;margin:0 auto;padding-inline:16px;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);display:flex;align-items:center;gap:12px;padding-block:14px 12px;border-bottom:1px solid var(--line)}
+.top .mark{width:40px;height:40px;flex:none}
+.brand{display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-family:var(--display);font-weight:400;font-size:20px;letter-spacing:.14em;color:var(--gold-hi)}
+.brand small{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.top .spacer{flex:1}
+.iconbtn{position:relative;width:40px;height:40px;border-radius:12px;border:1px solid var(--line-strong);background:var(--surface);display:grid;place-items:center}
+.iconbtn svg{width:19px;height:19px;stroke:var(--text)}
+.dot{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px var(--surface)}
+
+h1,h2,h3{margin:0;text-wrap:balance}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.greet{padding-block:20px 4px}
+.greet h1{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.15;margin-top:4px}
+.greet h1 em{font-style:normal;color:var(--gold-hi)}
+.sub{color:var(--muted);margin:6px 0 0}
+section{margin-top:22px}
+.sechead{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.sechead h2{font-family:var(--display);font-weight:400;font-size:20px}
+.link{background:none;border:0;color:var(--gold);font-weight:600;font-size:13px;padding:4px}
+
+/* balance */
+.balance{background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;padding:18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+.ring{width:118px;height:118px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .c{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .c b{font-family:var(--display);font-weight:400;font-size:28px;display:block;line-height:1}
+.ring .c span{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.legend{display:grid;gap:10px}
+.lg{display:grid;grid-template-columns:10px 1fr auto;gap:8px;align-items:center;font-size:14px}
+.lg i{width:10px;height:10px;border-radius:3px}
+.lg b{font-variant-numeric:tabular-nums;font-weight:600}
+.lg .of{color:var(--faint);font-weight:400}
+.status{grid-column:1/-1;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;font-size:13px}
+.status.ok{background:var(--mint-bg);color:var(--mint)}
+.status.warn{background:var(--amber-bg);color:var(--amber)}
+.status svg{stroke:currentColor;flex:none;width:18px;height:18px;margin-top:1px}
+
+/* week */
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{border:1px solid var(--line-strong);background:var(--surface);border-radius:14px;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+.day span{font-size:11px;color:var(--muted);letter-spacing:.05em}
+.day b{font-size:17px;font-variant-numeric:tabular-nums}
+.day .pips{display:flex;gap:3px;height:5px}
+.day .pips i{width:5px;height:5px;border-radius:50%}
+.day[aria-pressed="true"]{background:linear-gradient(160deg,var(--gold-hi),var(--gold) 55%,var(--gold-lo));border-color:transparent;color:var(--on-gold)}
+.day[aria-pressed="true"] span{color:var(--on-gold);opacity:.8}
+.day.today b{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}
+.agenda{margin-top:12px;display:grid;gap:8px}
+.slot{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:stretch}
+.slot time{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:12px;text-align:right}
+.blk{border-radius:14px;padding:10px 14px;border:1px solid var(--line-strong);background:var(--surface)}
+.blk h4{margin:0;font-size:14.5px;font-weight:600}
+.blk p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.blk.growth{border-color:transparent;background:linear-gradient(90deg,#D6B25E26,#D6B25E0A);box-shadow:inset 3px 0 0 var(--gold)}
+.blk.me{border-color:transparent;background:var(--mint-bg);box-shadow:inset 3px 0 0 var(--mint)}
+.blk.me h4{color:var(--mint)}
+.blk.event{border-style:dashed;border-color:var(--gold)}
+.blk.exam{border-color:transparent;background:var(--red-bg);box-shadow:inset 3px 0 0 var(--red)}
+
+/* nudges */
+.nudges{display:grid;gap:8px}
+.nudge{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.nudge .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;background:var(--raised)}
+.nudge .ic svg{width:16px;height:16px}
+.nudge p{margin:0;font-size:13.5px}
+.nudge p b{color:var(--gold-hi);font-weight:600}
+
+/* discover */
+.search{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line-strong);border-radius:14px;padding:0 12px}
+.search svg{width:18px;height:18px;stroke:var(--muted);flex:none}
+.search input{flex:1;border:0;background:transparent;padding:12px 0;outline:none;min-width:0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-block:12px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:500;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.cards{display:grid;gap:14px;margin-top:10px}
+.ev{background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;padding:16px;display:grid;gap:12px}
+.ev .row1{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.kind{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--gold)}
+.ev h3{font-size:17px;font-weight:600;margin-top:3px;line-height:1.3}
+.meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);margin-top:4px}
+.meta span{display:inline-flex;align-items:center;gap:5px}
+.meta svg{width:13px;height:13px;stroke:var(--muted)}
+.match{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;text-align:center;background:conic-gradient(var(--gold) calc(var(--p)*1%),var(--raised) 0)}
+.match div{width:48px;height:48px;border-radius:50%;background:var(--surface);display:grid;place-items:center;line-height:1}
+.match b{font-size:15px;font-variant-numeric:tabular-nums}
+.match small{display:block;font-size:9px;color:var(--muted);letter-spacing:.08em;margin-top:2px}
+.why{font-size:13px;color:var(--muted);margin:0}
+.why b{color:var(--text);font-weight:600}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.lvl{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
+.lvl i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.lvl.light{color:var(--mint);background:var(--mint-bg)}
+.lvl.medium{color:var(--amber);background:var(--amber-bg)}
+.lvl.intense{color:var(--red);background:var(--red-bg)}
+.tag{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--raised);color:var(--text)}
+.tag.new{box-shadow:inset 0 0 0 1px var(--gold);color:var(--gold-hi)}
+.fit{display:flex;gap:8px;align-items:center;font-size:12.5px;font-weight:600}
+.fit svg{width:16px;height:16px;flex:none;stroke:currentColor}
+.fit.ok{color:var(--mint)} .fit.warn{color:var(--amber)} .fit.bad{color:var(--red)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border-radius:12px;padding:10px 16px;font-weight:600;font-size:14px;border:1px solid var(--line-strong);background:var(--raised)}
+.btn.primary{background:linear-gradient(160deg,var(--gold-hi),var(--gold) 60%);border-color:transparent;color:var(--on-gold)}
+.btn.done{background:var(--mint-bg);color:var(--mint);border-color:transparent}
+.btn.ghost{background:transparent}
+.empty{text-align:center;color:var(--muted);padding:40px 12px;border:1px dashed var(--line-strong);border-radius:18px}
+
+/* skills */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
+.stat b{font-family:var(--display);font-weight:400;font-size:26px;color:var(--gold-hi);display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.areas{display:grid;gap:14px;background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;padding:16px}
+.area .t{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.area .t span{color:var(--muted);font-size:12.5px}
+.bar{height:8px;border-radius:99px;background:var(--raised);overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-lo),var(--gold),var(--gold-hi));transition:width .5s ease}
+.bar b{position:absolute;top:0;bottom:0;width:2px;background:var(--ground)}
+.ticks{display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);margin-top:4px;letter-spacing:.04em}
+.taglist{display:flex;flex-wrap:wrap;gap:6px}
+.path{display:grid;gap:0;position:relative;padding-left:22px}
+.path::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--line-strong)}
+.step{position:relative;padding-block:6px 14px}
+.step::before{content:"";position:absolute;left:-21px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--ground);border:2px solid var(--gold)}
+.step.doneS::before{background:var(--gold)}
+.step h4{margin:0;font-size:14.5px;font-weight:600}
+.step p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+
+/* portfolio */
+.pcard{background:var(--surface);border:1px solid var(--line-strong);border-radius:18px;padding:16px;display:grid;gap:8px}
+.pcard .top2{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pcard h3{font-size:16px;font-weight:600}
+.pcard time{font-size:12px;color:var(--muted);white-space:nowrap}
+.pcard p{margin:0;font-size:13.5px;color:var(--muted)}
+.share{background:var(--raised);border-radius:16px;padding:14px;font-size:13.5px;white-space:pre-wrap;border:1px solid var(--line)}
+
+/* profile */
+.card{background:var(--surface);border:1px solid var(--line-strong);border-radius:20px;padding:16px;display:grid;gap:14px}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;color:var(--muted);font-weight:500}
+.field select,.field input[type=text]{background:var(--raised);border:1px solid var(--line-strong);border-radius:12px;padding:10px 12px;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.rangeval{display:flex;justify-content:space-between;align-items:baseline}
+.rangeval b{font-variant-numeric:tabular-nums;color:var(--gold-hi)}
+.wrap{display:flex;flex-wrap:wrap;gap:8px}
+.wrap .chip{flex:initial}
+.note{font-size:12px;color:var(--faint);text-align:center;margin-top:24px}
+
+/* nav */
+nav.bottom{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line-strong);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
+nav.bottom .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav.bottom button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;color:var(--faint);font-size:11px;font-weight:600;letter-spacing:.02em}
+nav.bottom svg{width:22px;height:22px;stroke:currentColor}
+nav.bottom button[aria-current="page"]{color:var(--gold-hi)}
+nav.bottom button[aria-current="page"] svg{filter:drop-shadow(0 0 6px #D6B25E66)}
+
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;background:var(--text);color:var(--ground);padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;transition:.25s;z-index:20;pointer-events:none;max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.view{animation:in .3s ease}
+@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:380px){.balance{grid-template-columns:1fr;justify-items:center}.legend{width:100%}}
+/* onboarding + forms */
+.onb{padding-block:28px 8px;display:grid;gap:20px}
+.onb-hero{display:flex;gap:18px;align-items:center}
+.onb-mark{width:92px;height:92px;flex:none;filter:drop-shadow(0 8px 24px #D6B25E40)}
+.onb h1{font-family:var(--display);font-weight:400;font-size:30px;line-height:1.15;margin-top:4px}
+.onb h1 em{font-style:normal;color:var(--gold-hi)}
+.loading{display:grid;justify-items:center;gap:14px;text-align:center;padding-top:10vh}
+.authcard{max-width:460px}
+.gbtn{width:100%;background:var(--surface);border:1px solid var(--line-strong);padding:12px 16px}
+.gbtn:hover{border-color:var(--gold)}
+.or{display:flex;align-items:center;gap:12px;color:var(--faint);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line-strong)}
+.hint{color:var(--faint);font-size:12px}
+.field input[type=email],.field input[type=password]{background:var(--raised);border:1px solid var(--line-strong);border-radius:12px;padding:10px 12px;width:100%}
+.syncst{display:block;margin-top:4px;color:var(--mint);font-weight:600}
+.btn:disabled{opacity:.7;cursor:progress}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;background:var(--raised);border-radius:14px;margin-top:12px}
+.seg button{border:0;background:transparent;border-radius:10px;padding:9px 8px;font-weight:600;font-size:13.5px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--gold-hi);box-shadow:0 1px 0 var(--line-strong)}
+.drop{display:grid;justify-items:center;gap:6px;text-align:center;padding:26px 16px;border:1.5px dashed var(--line-strong);border-radius:16px;cursor:pointer;margin-top:12px}
+.drop:hover{border-color:var(--gold)}
+.drop svg{width:28px;height:28px;stroke:var(--gold)}
+.drop .sub{font-size:13px;margin:0;max-width:44ch}
+.drop.busy{cursor:progress}
+.spin{width:28px;height:28px;border-radius:50%;border:3px solid var(--raised);border-top-color:var(--gold);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.review{display:grid;gap:12px;margin-top:12px}
+.rvhead{display:grid;gap:2px}.rvhead .sub{margin:0;font-size:13px}
+.rvrows{display:grid;gap:8px;max-height:420px;overflow-y:auto;padding-right:2px}
+.rvrow{display:grid;grid-template-columns:22px 70px 1fr 1fr;gap:6px;align-items:center}
+.rvrow .rvsub{grid-column:2/-1}
+.rvrow.off{opacity:.45}
+.rvrow input[type=checkbox],.chk input{accent-color:var(--gold);width:18px;height:18px}
+.rvrow select,.rvrow input[type=time],.rvrow input[type=text]{background:var(--raised);border:1px solid var(--line-strong);border-radius:10px;padding:7px 8px;width:100%;min-width:0;font-size:13.5px}
+.chk{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--muted)}
+@media (min-width:1100px){.rvrow{grid-template-columns:22px 70px 118px 118px 1fr}.rvrow .rvsub{grid-column:auto}}
+.formerr{margin:0;color:var(--red);font-size:13.5px;font-weight:600}
+.btn.danger{background:var(--red);border-color:transparent;color:#fff}
+.ttrow{display:grid;grid-template-columns:1fr auto 32px;gap:10px;align-items:center;font-size:13.5px;padding-block:2px}
+.ttrow .tm{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.rm{width:32px;height:32px;border-radius:9px;border:0;background:transparent;display:grid;place-items:center}
+.rm svg{width:16px;height:16px;stroke:var(--faint)}
+.rm:hover svg{stroke:var(--red)}
+.ttform{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.ttform #tsub{grid-column:1/3}
+.ttform.ex{grid-template-columns:1fr 1fr}
+.ttform.ex .btn{grid-column:1/-1}
+.ttform input,.ttform select{background:var(--raised);border:1px solid var(--line-strong);border-radius:12px;padding:9px 10px;width:100%;min-width:0}
+.cols{display:grid;gap:0 28px;grid-template-columns:minmax(0,1fr)}
+.cols>div>section:first-child:not(.first){margin-top:22px}
+.sidebrand{display:none}
+.cols>div>.card:first-child{margin-top:22px}
+@media (min-width:900px){
+  body{padding-left:228px}
+  body.noside{padding-left:0}
+  .app{max-width:1160px;padding-inline:32px;padding-bottom:48px}
+  .top .mark,.top .brand{display:none}
+  nav.bottom{top:0;right:auto;width:228px;border-top:0;border-right:1px solid var(--line-strong);padding:28px 14px;background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none;overflow-y:auto}
+  nav.bottom .in{display:flex;flex-direction:column;gap:4px;max-width:none}
+  .sidebrand{display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:22px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+  nav.bottom .sidebrand svg{width:88px;height:88px;filter:drop-shadow(0 8px 20px #D6B25E30)}
+  .sidebrand b{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:.16em;color:var(--gold-hi);margin-top:6px}
+  .sidebrand small{font-size:11.5px;color:var(--muted)}
+  nav.bottom button{flex-direction:row;gap:12px;padding:11px 14px;border-radius:12px;font-size:14.5px;justify-content:flex-start;color:var(--muted)}
+  nav.bottom button:hover{background:var(--raised)}
+  nav.bottom button[aria-current="page"]{background:var(--raised);color:var(--gold-hi)}
+  .cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .cols.wide-left{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .cols>div>section:first-child{margin-top:22px}
+  .cols>div>.stats{margin-top:22px}
+  .cards.grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));align-items:start}
+  .toolbar{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .toolbar .search{flex:0 1 340px}
+  .toolbar .chips{flex:1;padding-block:0;flex-wrap:wrap;overflow:visible}
+  .greet h1,.onb h1{font-size:38px}
+  .onb{max-width:760px;margin:0 auto;padding-top:56px}
+  .onb-mark{width:120px;height:120px}
+  .toast{bottom:32px}
+  body:not(.noside) .toast{left:calc(50% + 114px)}
+}
+@media (max-width:560px){.onb-hero{flex-direction:column;align-items:flex-start}.two{grid-template-columns:1fr}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="goldG" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#FBF0B8"/><stop offset=".45" stop-color="#D9B866"/><stop offset="1" stop-color="#8E6A24"/>
+    </radialGradient>
+    <symbol id="horse" viewBox="0 0 190 120">
+      <path d="M20 40C34 34 48 40 56 50C74 46 98 52 116 48C124 40 132 28 140 20L143 11L147 19L151 12L152 22C159 28 166 36 171 43C173 48 168 51 163 48C156 44 150 42 146 45C142 54 138 62 132 70L150 76L166 70L169 74L152 84L134 82L140 98L136 100L124 84L96 86L84 96L94 108L90 111L76 98L78 86L62 88L44 104L40 100L54 82C50 72 52 62 54 56C44 50 32 46 20 40Z"/>
+      <path d="M116 48C120 38 126 28 136 21C128 26 124 22 130 16C122 20 118 30 112 40C112 34 108 32 104 36C110 38 110 44 108 50Z"/>
+      <path d="M20 40C12 38 8 32 6 26C12 32 18 30 24 34C18 30 16 24 16 18C22 28 30 30 38 38Z"/>
+    </symbol>
+    <symbol id="mark" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="48" fill="url(#goldG)"/>
+      <use href="#horse" x="14" y="16" width="72" height="46" fill="#14110B"/>
+      <rect x="2" y="62" width="96" height="16" fill="#14110B"/>
+      <text x="50" y="74" text-anchor="middle" font-family="Marcellus, Optima, Georgia, serif" font-size="11" letter-spacing="1.5" fill="#E6C878">EQUIGROW</text>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="app">
+  <header class="top" id="topbar">
+    <svg class="mark" role="img" aria-label="Equigrow logo"><use href="#mark"/></svg>
+    <div class="brand"><b>EQUIGROW</b><small>Pathways to progress</small></div>
+    <div class="spacer"></div>
+    <button class="iconbtn" id="themeBtn" aria-label="Switch light or dark theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <button class="iconbtn" id="bellBtn" aria-label="Nudges">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+  </header>
+  <main id="main"></main>
+  <p class="note" id="note">Events shown are examples · Your data stays in this browser</p>
+</div>
+
+<nav class="bottom" aria-label="Main">
+  <div class="sidebrand"><svg role="img" aria-label="Equigrow logo"><use href="#mark"/></svg><b>EQUIGROW</b><small>Pathways to progress</small></div>
+  <div class="in" id="nav"></div>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const I = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  discover:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  skills:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  portfolio:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+  profile:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  pin:'<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
+  alert:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.01"/>',
+  x:'<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
+  leaf:'<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l7-7"/>',
+  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'
+};
+const svg=(k,extra='')=>`<svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ${extra}>${I[k]}</svg>`;
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- dates ---------- */
+const TODAY=(()=>{const d=new Date();d.setHours(0,0,0,0);return d})();
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const parseD=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fmtD=d=>d.toLocaleDateString("en-IN",{day:"numeric",month:"short"});
+const WEEK_START=addDays(TODAY,-((TODAY.getDay()+6)%7));
+const rel=n=>iso(addDays(TODAY,n));
+const mins=t=>{const [h,m]=t.replace("+","").split(":").map(Number);return h*60+m};
+const hrs=n=>Number.isInteger(n)?n:n.toFixed(1);
+const DAYNAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+/* ---------- catalogue (sample events, dated relative to today) ---------- */
+const INTERESTS=["AI/ML","Web Dev","App Dev","UI/UX Design","Cybersecurity","Data Science","Cloud","Competitive Coding","Robotics"];
+const TAG_AREA={"HTML":"Web Dev","CSS":"Web Dev","JavaScript":"Web Dev","React":"Web Dev","APIs":"Web Dev","Git":"Web Dev",
+ "Python":"AI/ML","Machine Learning":"AI/ML","Prompting":"AI/ML","LLMs":"AI/ML","Pandas":"Data Science","SQL":"Data Science","Data Viz":"Data Science",
+ "Figma":"UI/UX Design","Prototyping":"UI/UX Design","User Research":"UI/UX Design","Flutter":"App Dev","Firebase":"App Dev",
+ "Linux":"Cybersecurity","Networking":"Cybersecurity","CTF":"Cybersecurity","AWS":"Cloud","Docker":"Cloud",
+ "DSA":"Competitive Coding","C++":"Competitive Coding","Arduino":"Robotics","Sensors":"Robotics",
+ "Teamwork":"Soft Skills","Pitching":"Soft Skills","Public Speaking":"Soft Skills"};
+const EVENTS=[
+ {id:"e1",kind:"Workshop",name:"React from Zero",org:"ACM Student Chapter",off:3,start:"11:30",end:"14:30",mode:"Offline",place:"Seminar Hall B",level:"light",hours:3,tags:["React","JavaScript","APIs"],areas:["Web Dev"],beginner:true},
+ {id:"e2",kind:"Hackathon",name:"CodeMonsoon 24h Hackathon",org:"Inter-college",off:10,start:"12:00",end:"12:00+",mode:"Offline",place:"City campus",level:"intense",hours:24,tags:["Teamwork","Pitching","APIs","Figma"],areas:["Web Dev","UI/UX Design"],beginner:true},
+ {id:"e3",kind:"Workshop",name:"Build Your First ML Model",org:"AI Club",off:4,start:"15:00",end:"17:30",mode:"Online",place:"Google Meet",level:"light",hours:2.5,tags:["Python","Machine Learning","Pandas"],areas:["AI/ML","Data Science"],beginner:true},
+ {id:"e4",kind:"Workshop",name:"Prompt Engineering for Builders",org:"GDG On Campus",off:7,start:"17:00",end:"19:00",mode:"Online",place:"YouTube Live",level:"light",hours:2,tags:["Prompting","LLMs","APIs"],areas:["AI/ML"],beginner:true},
+ {id:"e5",kind:"Hackathon",name:"GenAI Weekend Build",org:"Open community",off:24,start:"10:00",end:"18:00",mode:"Online",place:"Remote · teams of 3",level:"medium",hours:16,tags:["LLMs","Python","Teamwork","Pitching"],areas:["AI/ML"],beginner:false},
+ {id:"e6",kind:"Workshop",name:"Figma for Developers",org:"Design Society",off:8,start:"16:30",end:"18:30",mode:"Offline",place:"Design Lab",level:"light",hours:2,tags:["Figma","Prototyping"],areas:["UI/UX Design"],beginner:true},
+ {id:"e7",kind:"Hackathon",name:"CTF Rookies Cup",org:"Cyber Security Club",off:17,start:"10:00",end:"20:00",mode:"Online",place:"Remote",level:"medium",hours:10,tags:["Linux","Networking","CTF"],areas:["Cybersecurity"],beginner:true},
+ {id:"e8",kind:"Workshop",name:"Git & GitHub the Right Way",org:"Open Source Club",off:11,start:"11:00",end:"13:00",mode:"Offline",place:"Lab 3",level:"light",hours:2,tags:["Git","Teamwork"],areas:["Web Dev"],beginner:true},
+ {id:"e9",kind:"Workshop",name:"Flutter App in a Day",org:"Mobile Dev Guild",off:18,start:"09:30",end:"17:00",mode:"Offline",place:"Main Auditorium",level:"medium",hours:7,tags:["Flutter","Firebase"],areas:["App Dev"],beginner:true},
+ {id:"e10",kind:"Hackathon",name:"Smart Campus 36h Hackathon",org:"Tech Fest",off:31,start:"08:00",end:"20:00+",mode:"Offline",place:"Innovation Centre",level:"intense",hours:36,tags:["React","Firebase","Teamwork","Pitching"],areas:["Web Dev","App Dev"],beginner:false},
+ {id:"e11",kind:"Workshop",name:"Data Viz with Python",org:"Data Science Club",off:14,start:"16:30",end:"18:30",mode:"Online",place:"Zoom",level:"light",hours:2,tags:["Python","Data Viz","Pandas"],areas:["Data Science"],beginner:true},
+ {id:"e12",kind:"Workshop",name:"AWS Cloud Crash Course",org:"Cloud Club",off:21,start:"17:00",end:"19:40",mode:"Online",place:"Remote",level:"medium",hours:3,tags:["AWS","Docker"],areas:["Cloud"],beginner:false},
+ {id:"e13",kind:"Workshop",name:"Pitch Like a Founder",org:"E-Cell",off:6,start:"17:00",end:"18:30",mode:"Offline",place:"E-Cell room",level:"light",hours:1.5,tags:["Pitching","Public Speaking"],areas:["Soft Skills"],beginner:true},
+ {id:"e14",kind:"Workshop",name:"Arduino & Sensors Starter Lab",org:"Robotics Club",off:12,start:"14:00",end:"17:00",mode:"Offline",place:"Robotics Lab",level:"light",hours:3,tags:["Arduino","Sensors","C++"],areas:["Robotics"],beginner:true},
+ {id:"e15",kind:"Hackathon",name:"Code Sprint: DSA Marathon",org:"Coding Club",off:15,start:"18:00",end:"21:00",mode:"Online",place:"Remote",level:"medium",hours:3,tags:["DSA","C++"],areas:["Competitive Coding"],beginner:true}
+].map(e=>({...e,date:rel(e.off)}));
+
+/* sample profile used by "Explore with a sample profile" */
+const SAMPLE={
+  profile:{name:"Prathika",college:"Amrita School of Computing, Chennai",branch:"CSE",year:"1st year",interests:["AI/ML","Web Dev","UI/UX Design"],growth:8,me:14},
+  tt:{1:[["09:00","10:40","Calculus"],["11:00","12:40","Computer Hardware Essentials"],["14:00","15:40","Programming in C · Lab"]],
+      2:[["09:00","10:40","Engineering Physics"],["11:00","12:40","Calculus"],["14:00","16:30","Hardware Lab"]],
+      3:[["09:00","10:40","Computer Hardware Essentials"],["11:00","12:40","English Communication"],["14:00","15:40","Programming in C"]],
+      4:[["09:00","10:40","Calculus"],["11:00","12:40","Engineering Physics"],["14:00","15:40","Values Programme"]],
+      5:[["09:00","10:40","Programming in C"],["11:00","12:40","Computer Hardware Essentials"],["14:00","15:00","Mentoring hour"]],
+      6:[["09:00","11:00","Physics Lab"]]},
+  exams:[{date:rel(16),name:"Calculus · Periodical 1"}],
+  past:[{name:"HTML & CSS Bootcamp",kind:"Workshop",date:rel(-24),tags:["HTML","CSS"],role:"Participant",note:"Built a responsive personal landing page."},
+        {name:"Expense Tracker App",kind:"Project",date:rel(-11),tags:["JavaScript","HTML","CSS"],role:"Solo builder",note:"Personal finance tracker with categories and charts."}],
+  planned:["e1"]
+};
+
+/* ---------- state (saved per browser) ---------- */
+/* ============ ACCOUNTS & SYNC (Firebase) ============
+   Paste your Firebase web app config between the braces below to turn on
+   sign-in and sync across devices. Leave it empty to keep data in this browser only. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCZpJL81o6Sm3h3LyWR6zjFA9WiBPKqcDI",
+  authDomain: "equigrow-c251a.firebaseapp.com",
+  projectId: "equigrow-c251a",
+  storageBucket: "equigrow-c251a.firebasestorage.app",
+  messagingSenderId: "104569406306",
+  appId: "1:104569406306:web:ad8c67a9e7d65d5c44223b"
+};
+const FIRESTORE_DB_ID = "default"; // your Firestore database name (shown in the dropdown at the top of the Firestore page)
+/* ===================================================== */
+const CLOUD=!!FIREBASE_CONFIG.apiKey;
+let fb=null,USER=null,AUTH_STATE=CLOUD?"loading":"local",AUTH_MODE="signin",AUTH_ERR="",syncT=null;
+const KEY="equigrow.v2";
+const fresh=()=>({view:"home",day:(TODAY.getDay()+6)%7,profile:null,tt:{},exams:[],past:[],planned:[],done:[],saved:[],filter:"All",q:"",confirmOut:false});
+let S;
+try{S=Object.assign(fresh(),CLOUD?{}:JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){S=fresh()}
+S.confirmOut=false;
+const cacheKey=()=>USER?KEY+"."+USER.uid:KEY;
+const save=()=>{try{localStorage.setItem(cacheKey(),JSON.stringify(S))}catch(e){}
+  if(CLOUD&&USER&&S.profile){clearTimeout(syncT);setSync("Saving…");syncT=setTimeout(pushCloud,700)}};
+const setSync=t=>{const el=document.getElementById("syncState");if(el)el.textContent=t};
+function persistable(){const {view,q,filter,confirmOut,...rest}=S;return rest}
+async function pushCloud(){
+  if(!USER)return;
+  try{await fb.db.collection("users").doc(USER.uid).set({data:JSON.stringify(persistable()),updatedAt:fb.ts()});setSync("All changes synced")}
+  catch(e){console.warn(e);setSync(e&&e.code==="permission-denied"?"Couldn't save: check your Firestore Security rules":"Couldn't save right now. Check your connection; it will retry on your next change")}
+}
+const AUTH_MSG={"auth/invalid-credential":"Email or password is incorrect.","auth/invalid-login-credentials":"Email or password is incorrect.","auth/wrong-password":"Email or password is incorrect.","auth/user-not-found":"No account with that email. Create one instead.","auth/email-already-in-use":"An account with this email already exists. Sign in instead.","auth/weak-password":"Use at least 6 characters for your password.","auth/invalid-email":"That email address doesn't look right.","auth/missing-email":"Type your email above first.","auth/popup-closed-by-user":"Google sign-in was closed before it finished.","auth/popup-blocked":"Your browser blocked the Google sign-in window. Allow pop-ups for this site and try again.","auth/unauthorized-domain":"This website isn't allowed to use sign-in yet. Add its domain in Firebase → Authentication → Settings → Authorized domains.","auth/operation-not-allowed":"This sign-in method is turned off. Enable it in Firebase → Authentication → Sign-in method.","auth/network-request-failed":"No internet connection. Try again when you're online.","auth/too-many-requests":"Too many attempts. Wait a minute and try again."};
+const authMsg=e=>AUTH_MSG[e&&e.code]||"Something went wrong. Please try again.";
+async function initCloud(){
+  const base="https://www.gstatic.com/firebasejs/12.3.0/";
+  let App,A,F;
+  try{[App,A,F]=await Promise.all([import(base+"firebase-app.js"),import(base+"firebase-auth.js"),import(base+"firebase-firestore.js")])}
+  catch(e){AUTH_STATE="error";AUTH_ERR="Couldn't reach the sign-in service. Check your internet connection and reload the page.";render();return}
+  const app=App.initializeApp(FIREBASE_CONFIG),auth=A.getAuth(app),db=F.getFirestore(app,FIRESTORE_DB_ID);
+  fb={
+    app,base,
+    ts:()=>F.serverTimestamp(),
+    auth:{
+      onAuthStateChanged:cb=>A.onAuthStateChanged(auth,cb),
+      signInWithEmailAndPassword:(e,p)=>A.signInWithEmailAndPassword(auth,e,p),
+      createUserWithEmailAndPassword:(e,p)=>A.createUserWithEmailAndPassword(auth,e,p),
+      signOut:()=>A.signOut(auth),
+      sendPasswordResetEmail:e=>A.sendPasswordResetEmail(auth,e),
+      google:()=>A.signInWithPopup(auth,new A.GoogleAuthProvider())
+    },
+    db:{collection:c=>({doc:id=>({
+      get:async()=>{const d=await F.getDoc(F.doc(db,c,id));return{exists:d.exists(),data:()=>d.data()}},
+      set:v=>F.setDoc(F.doc(db,c,id),v)
+    })})}
+  };
+  fb.auth.onAuthStateChanged(async u=>{
+    USER=u;clearTimeout(syncT);
+    if(!u){S=fresh();AUTH_STATE="signedout";render();return}
+    AUTH_STATE="loading";render();
+    let loaded=false;
+    try{const snap=await fb.db.collection("users").doc(u.uid).get();
+      if(snap.exists){S=Object.assign(fresh(),JSON.parse(snap.data().data||"{}"));loaded=true}}
+    catch(e){console.warn(e)}
+    if(!loaded){try{const c=localStorage.getItem(cacheKey());S=Object.assign(fresh(),c?JSON.parse(c):{})}catch(e){S=fresh()}}
+    S.confirmOut=false;AUTH_STATE="in";render();
+  });
+}
+const $=s=>document.querySelector(s);
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2200)};
+
+/* ---------- logic ---------- */
+function learnedTags(){const s=new Set();S.past.forEach(p=>p.tags.forEach(t=>s.add(t)));S.done.forEach(id=>{const e=EVENTS.find(x=>x.id===id);e&&e.tags.forEach(t=>s.add(t))});return s}
+function matchScore(e){
+  const ints=S.profile.interests;const hit=e.areas.filter(a=>ints.includes(a));
+  const learned=learnedTags();const nw=e.tags.filter(t=>!learned.has(t)).length;
+  let s=38+(hit.length?34+Math.min(hit.length-1,1)*8:0)+Math.round(nw/e.tags.length*12);
+  const y1=S.profile.year==="1st year";if(y1&&e.beginner)s+=8;if(y1&&!e.beginner)s-=6;if(!y1&&!e.beginner)s+=4;
+  if(e.tags.some(t=>learned.has(t))&&nw>0)s+=4;
+  return {score:Math.max(20,Math.min(98,s)),hit};
+}
+const weekOf=d=>iso(addDays(d,-((d.getDay()+6)%7)));
+function plannedHours(wk){return S.planned.map(id=>EVENTS.find(e=>e.id===id)).filter(e=>e&&weekOf(parseD(e.date))===wk).reduce((a,e)=>a+Math.min(e.hours,12),0)}
+function classHours(){let t=0;Object.values(S.tt).forEach(d=>d.forEach(c=>t+=Math.max(0,(mins(c[1])-mins(c[0]))/60)));return t}
+function fit(e){
+  const d=parseD(e.date);const ex=S.exams.find(x=>Math.abs(parseD(x.date)-d)<=86400000);
+  if(ex)return{cls:"bad",icon:"x",txt:`Too close to ${ex.name} (${fmtD(parseD(ex.date))})`};
+  const c=(S.tt[d.getDay()]||[]).find(c=>mins(e.start)<mins(c[1])&&mins(e.end.includes("+")?"23:59":e.end)>mins(c[0]));
+  if(c)return{cls:"warn",icon:"alert",txt:`Clashes with ${c[2]} (${c[0]}–${c[1]})`};
+  if(plannedHours(weekOf(d))+Math.min(e.hours,12)>S.profile.growth+6)return{cls:"warn",icon:"alert",txt:`Would push that week past your ${S.profile.growth}h growth limit`};
+  return{cls:"ok",icon:"check",txt:"You're free · fits your balance"};
+}
+function growthTask(i){
+  const ints=S.profile.interests,pool=[];
+  if(ints.includes("Web Dev"))pool.push("Add a projects section to your portfolio site","Follow a React tutorial, part 2");
+  if(ints.includes("AI/ML"))pool.push("Python practice: 3 Pandas exercises","Read: how LLMs work (20 min)");
+  if(ints.includes("UI/UX Design"))pool.push("Redesign one screen in Figma");
+  if(ints.includes("App Dev"))pool.push("Build one Flutter screen");
+  if(ints.includes("Cybersecurity"))pool.push("Linux basics: file permissions");
+  if(ints.includes("Data Science"))pool.push("Explore a Kaggle dataset");
+  if(ints.includes("Cloud"))pool.push("Deploy a static site to the cloud");
+  if(ints.includes("Competitive Coding"))pool.push("Solve 2 DSA problems");
+  if(ints.includes("Robotics"))pool.push("Watch an Arduino basics video");
+  if(!pool.length)pool.push("Update your LinkedIn with last month's work");
+  return pool[i%pool.length];
+}
+
+/* ---------- views ---------- */
+function vAuth(){
+  const mark='<svg class="onb-mark" role="img" aria-label="Equigrow logo"><use href="#mark"/></svg>';
+  if(AUTH_STATE==="loading")return `<div class="onb view"><div class="loading">${mark}<p class="sub">Loading your pathway…</p></div></div>`;
+  if(AUTH_STATE==="error")return `<div class="onb view"><div class="loading">${mark}<p class="formerr">${esc(AUTH_ERR)}</p></div></div>`;
+  const up=AUTH_MODE==="signup";
+  return `<div class="onb view">
+   <div class="onb-hero">${mark}<div><div class="eyebrow">Equigrow · Pathways to progress</div><h1>${up?"Create your <em>account</em>":"Welcome <em>back</em>"}</h1>
+   <p class="sub">${up?"One account for your phone and laptop. Your plan, skills and portfolio follow you everywhere.":"Sign in to pick up where you left off, on any device."}</p></div></div>
+   <form class="card authcard" id="authForm" novalidate>
+    <button type="button" class="btn gbtn" id="gBtn">Continue with Google</button>
+    <div class="or"><span>or use email</span></div>
+    <div class="field"><label for="aemail">Email</label><input id="aemail" type="email" autocomplete="email" placeholder="you@college.edu" required></div>
+    <div class="field"><label for="apass">Password</label><input id="apass" type="password" autocomplete="${up?"new-password":"current-password"}" minlength="6" required>${up?'<small class="hint">At least 6 characters</small>':""}</div>
+    <p class="formerr" id="aerr" ${AUTH_ERR?"":"hidden"}>${esc(AUTH_ERR)}</p>
+    <div class="actions"><button class="btn primary" type="submit" id="authSubmit">${up?"Create account":"Sign in"}</button>${up?"":'<button class="btn ghost" type="button" id="forgotBtn">Forgot password?</button>'}</div>
+    <p class="sub" style="margin:0;font-size:13.5px">${up?"Already have an account?":"New to Equigrow?"} <button type="button" class="link" id="swapAuth">${up?"Sign in":"Create an account"}</button></p>
+   </form></div>`;
+}
+function vOnboard(){
+  return `<div class="onb view">
+   <div class="onb-hero"><svg class="onb-mark" role="img" aria-label="Equigrow logo"><use href="#mark"/></svg>
+    <div><div class="eyebrow">Welcome to Equigrow</div><h1>Set up your <em>pathway</em></h1>
+    <p class="sub">Tell us about yourself once. Equigrow uses it to rank workshops and hackathons for you and to plan around your classes. ${CLOUD?"It's saved to your account, so it follows you to any device.":"Your details stay in this browser."}</p></div></div>
+   <form class="card" id="onbForm">
+    <div class="two"><div class="field"><label for="oname">Your name</label><input id="oname" type="text" required placeholder="e.g. Aarav" value="${esc(USER&&USER.displayName||"")}" autocomplete="given-name"></div>
+    <div class="field"><label for="ocollege">College or school</label><input id="ocollege" type="text" placeholder="e.g. Amrita School of Computing"></div></div>
+    <div class="two"><div class="field"><label for="obranch">Branch / department</label><select id="obranch">${["CSE","AI & DS","ECE","EEE","Mechanical","Civil","Other"].map(b=>`<option>${b}</option>`).join("")}</select></div>
+    <div class="field"><label for="oyear">Year</label><select id="oyear">${["1st year","2nd year","3rd year","4th year"].map(b=>`<option>${b}</option>`).join("")}</select></div></div>
+    <div class="field"><label>What are you interested in? <span style="color:var(--faint)">Pick at least one</span></label><div class="wrap" id="oints">${INTERESTS.map(x=>`<button type="button" class="chip" data-oint="${x}" aria-pressed="false">${x}</button>`).join("")}</div></div>
+    <div class="two"><div class="field"><div class="rangeval"><label for="ogrowth">Growth hours per week</label><b id="ogv">8h</b></div><input id="ogrowth" type="range" min="2" max="20" value="8"></div>
+    <div class="field"><div class="rangeval"><label for="ome">Protected me-time per week</label><b id="omv">14h</b></div><input id="ome" type="range" min="4" max="30" value="14"></div></div>
+    <p class="formerr" id="oerr" hidden></p>
+    <div class="actions"><button class="btn primary" type="submit">Start planning</button><button class="btn ghost" type="button" data-demo="1">Explore with a sample profile</button></div>
+   </form></div>`;
+}
+function vHome(){
+  const p=S.profile,aca=classHours(),wk=iso(WEEK_START);
+  const ev=plannedHours(wk),growth=Math.max(ev,Math.min(p.growth,ev+4)),me=p.me,tot=aca+growth+me||1,over=ev>p.growth;
+  const C=2*Math.PI*48;let off=0;
+  const segs=[[aca,"var(--faint)"],[growth,"var(--gold)"],[me,"var(--mint)"]].filter(x=>x[0]>0).map(([v,c])=>{const len=v/tot*C;const s=`<circle cx="59" cy="59" r="48" fill="none" stroke="${c}" stroke-width="12" stroke-dasharray="${Math.max(len-3,0)} ${C}" stroke-dashoffset="${-off}"/>`;off+=len;return s}).join("");
+  const days=[...Array(7)].map((_,i)=>{const d=addDays(WEEK_START,i),wd=d.getDay();
+    const hasC=(S.tt[wd]||[]).length,hasE=S.planned.some(id=>EVENTS.find(e=>e.id===id)?.date===iso(d));
+    return `<button class="day ${iso(d)===iso(TODAY)?"today":""}" data-day="${i}" aria-pressed="${S.day===i}"><span>${d.toLocaleDateString("en-IN",{weekday:"short"})}</span><b>${d.getDate()}</b><span class="pips">${hasC?'<i style="background:var(--faint)"></i>':""}${hasE?'<i style="background:var(--gold)"></i>':""}<i style="background:var(--mint)"></i></span></button>`}).join("");
+  const h=new Date().getHours(),hi=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+  const next=EVENTS.filter(e=>!S.planned.includes(e.id)&&!S.done.includes(e.id)&&parseD(e.date)>=TODAY).map(e=>[e,matchScore(e).score]).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([e])=>evCard(e)).join("");
+  return `<div class="greet"><div class="eyebrow">${TODAY.toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"long"})}</div>
+   <h1>${hi}, <em>${esc(p.name)}</em></h1><p class="sub">${esc(p.branch)} · ${esc(p.year)}${p.college?" · "+esc(p.college):""}</p></div>
+  <div class="cols wide-left"><div>
+  <section><div class="balance">
+    <div class="ring"><svg viewBox="0 0 118 118"><circle cx="59" cy="59" r="48" fill="none" stroke="var(--raised)" stroke-width="12"/>${segs}</svg><div class="c"><div><b>${hrs(aca+growth+me)}h</b><span>THIS WEEK</span></div></div></div>
+    <div class="legend">
+      <div class="lg"><i style="background:var(--faint)"></i>Academics<b>${hrs(aca)}h</b></div>
+      <div class="lg"><i style="background:var(--gold)"></i>Growth<b>${hrs(growth)}h <span class="of">/ ${p.growth}</span></b></div>
+      <div class="lg"><i style="background:var(--mint)"></i>Me-time<b>${me}h <span class="of">protected</span></b></div>
+    </div>
+    <div class="status ${over?"warn":"ok"}">${svg(over?"alert":"leaf")}<span>${over?`You've planned ${hrs(ev)}h of events, more than your ${p.growth}h growth limit. Consider dropping one.`:`Balanced week. ${me}h of me-time is locked in, and no event will be suggested over it.`}</span></div>
+  </div></section>
+  <section><div class="sechead"><h2>Your week</h2><span class="eyebrow">${fmtD(WEEK_START)} – ${fmtD(addDays(WEEK_START,6))}</span></div>
+    <div class="days">${days}</div><div class="agenda">${agenda(S.day)}</div></section>
+  </div><div>
+  <section><div class="sechead"><h2>Up next for you</h2><button class="link" data-go="discover">See all</button></div><div class="cards">${next||'<div class="empty">You\'ve planned everything that matches. Check Discover for more.</div>'}</div></section>
+  <section id="nudgeSec"><div class="sechead"><h2>Nudges</h2></div><div class="nudges">${nudges().join("")}</div></section>
+  </div></div>`;
+}
+function agenda(i){
+  const d=addDays(WEEK_START,i),wd=d.getDay(),items=[];
+  (S.tt[wd]||[]).forEach(c=>items.push({t:c[0],cls:"",h:c[2],p:`${c[0]}–${c[1]} · Class`}));
+  S.planned.map(id=>EVENTS.find(e=>e.id===id)).filter(e=>e&&e.date===iso(d)).forEach(e=>items.push({t:e.start,cls:"event",h:e.name,p:`${e.kind} · ${e.place}`}));
+  S.exams.filter(x=>x.date===iso(d)).forEach(x=>items.push({t:"08:30",cls:"exam",h:x.name,p:"Exam"}));
+  const weekend=wd===0||wd===6;
+  items.push({t:weekend?"11:30":"17:00",cls:"growth",h:growthTask(i),p:`Growth · ${weekend?"1.5h":"1h"} · suggested`});
+  items.push({t:weekend?"16:00":"18:30",cls:"me",h:weekend?"Free afternoon, no plans":"Me-time",p:weekend?"Protected · friends, rest, anything":"Protected · 2h"});
+  items.sort((a,b)=>mins(a.t)-mins(b.t));
+  return items.map(x=>`<div class="slot"><time>${x.t}</time><div class="blk ${x.cls}"><h4>${esc(x.h)}</h4><p>${esc(x.p)}</p></div></div>`).join("");
+}
+function nudges(){
+  const learned=learnedTags(),out=[];
+  if(!Object.keys(S.tt).some(k=>S.tt[k].length))out.push(["cal",`Add your <b>class timetable</b> in Profile so Equigrow can plan around your classes and flag clashes.`,"profile"]);
+  if(learned.has("HTML")&&!learned.has("React"))out.push(["spark",`You know <b>HTML & CSS</b>. <b>React from Zero</b> is your natural next step.`]);
+  else if(!learned.size)out.push(["spark",`Complete your first workshop and its skills will show up in <b>Skills</b> and your <b>Portfolio</b>.`]);
+  const ex=S.exams.filter(x=>parseD(x.date)>=TODAY).sort((a,b)=>a.date.localeCompare(b.date))[0];
+  if(ex)out.push(["alert",`<b>${esc(ex.name)}</b> is on ${fmtD(parseD(ex.date))}. Events the day before and after are flagged.`]);
+  out.push(["leaf",S.done.length>=3?`You've finished ${S.done.length} events recently. Take this weekend fully off.`:`Sunday afternoon is kept free on purpose. Rest counts as progress.`]);
+  return out.map(([i,t,go])=>`<div class="nudge"><div class="ic">${svg(i,'style="stroke:var(--gold)"')}</div><p>${t}${go?` <button class="link" data-go="${go}">Open Profile</button>`:""}</p></div>`);
+}
+function evCard(e){
+  const {score,hit}=matchScore(e),f=fit(e),learned=learnedTags();
+  const planned=S.planned.includes(e.id),done=S.done.includes(e.id);
+  const lv={light:"Light · no prep",medium:"Medium · basics needed",intense:"Intense · team needed"}[e.level];
+  const d=parseD(e.date);
+  return `<article class="ev"><div class="row1"><div><div class="kind">${e.kind} · ${e.mode}</div><h3>${esc(e.name)}</h3>
+   <div class="meta"><span>${svg("cal")}${d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}</span><span>${svg("clock")}${e.start} · ${hrs(e.hours)}h</span><span>${svg("pin")}${esc(e.place)}</span></div></div>
+   <div class="match" style="--p:${score}" aria-label="${score}% match"><div><div><b>${score}%</b><small>MATCH</small></div></div></div></div>
+   <p class="why">${hit.length?`Matches your interest in <b>${hit.join(" & ")}</b>`:`Outside your interests, good for exploring`}${e.beginner?" · beginner-friendly":""}. By ${esc(e.org)}.</p>
+   <div class="badges"><span class="lvl ${e.level}"><i></i>${lv}</span></div>
+   <div><div class="eyebrow" style="margin-bottom:6px">Skills you'll gain</div><div class="taglist">${e.tags.map(t=>`<span class="tag ${learned.has(t)?"":"new"}">${learned.has(t)?"✓ ":""}${t}</span>`).join("")}</div></div>
+   ${done?"":`<div class="fit ${f.cls}">${svg(f.icon)}${f.txt}</div>`}
+   <div class="actions">${done?`<button class="btn done" disabled>Completed · skills added</button>`:planned?`<button class="btn done" data-unplan="${e.id}">✓ In your plan</button><button class="btn" data-done="${e.id}">Mark completed</button>`:`<button class="btn primary" data-plan="${e.id}">Add to plan</button><button class="btn ghost" data-save="${e.id}">${S.saved.includes(e.id)?"Saved":"Save"}</button>`}</div>
+  </article>`;
+}
+function vDiscover(){
+  const F=["All","For you","Workshops","Hackathons","Light","Medium","Intense","Online","Offline","Saved"];
+  let list=EVENTS.filter(e=>parseD(e.date)>=TODAY||S.done.includes(e.id));const f=S.filter;
+  if(f==="For you")list=list.filter(e=>matchScore(e).score>=75);
+  if(f==="Workshops")list=list.filter(e=>e.kind==="Workshop");
+  if(f==="Hackathons")list=list.filter(e=>e.kind==="Hackathon");
+  if(["Light","Medium","Intense"].includes(f))list=list.filter(e=>e.level===f.toLowerCase());
+  if(["Online","Offline"].includes(f))list=list.filter(e=>e.mode===f);
+  if(f==="Saved")list=list.filter(e=>S.saved.includes(e.id));
+  const q=S.q.trim().toLowerCase();if(q)list=list.filter(e=>(e.name+e.org+e.tags.join(" ")).toLowerCase().includes(q));
+  list.sort((a,b)=>matchScore(b).score-matchScore(a).score);
+  return `<div class="greet"><div class="eyebrow">Discover</div><h1>Workshops & hackathons, <em>ranked for you</em></h1><p class="sub">Matched to ${esc(S.profile.interests.join(", "))} and checked against your timetable.</p></div>
+  <div class="toolbar"><label class="search">${svg("search")}<input id="q" type="text" placeholder="Search events or skills (e.g. React)" value="${esc(S.q)}" aria-label="Search events"></label>
+  <div class="chips">${F.map(x=>`<button class="chip" data-filter="${x}" aria-pressed="${f===x}">${x}</button>`).join("")}</div></div>
+  <div class="cards grid">${list.length?list.map(evCard).join(""):`<div class="empty">No events match this filter yet.<br>Try “All” or another skill.</div>`}</div>`;
+}
+function vSkills(){
+  const learned=learnedTags(),learning=new Set();
+  S.planned.forEach(id=>EVENTS.find(e=>e.id===id)?.tags.forEach(t=>{if(!learned.has(t))learning.add(t)}));
+  const areas={};Object.entries(TAG_AREA).forEach(([t,a])=>{areas[a]=areas[a]||{tot:0,have:0,doing:0};areas[a].tot++;if(learned.has(t))areas[a].have++;else if(learning.has(t))areas[a].doing++});
+  const show=[...new Set([...S.profile.interests.filter(a=>areas[a]),"Soft Skills"])];
+  const lvl=p=>p<34?"Beginner":p<67?"Intermediate":"Advanced";
+  const timeline=[...S.past.map(p=>({n:p.name,d:p.date,k:p.kind,done:true})),...S.done.map(id=>{const e=EVENTS.find(x=>x.id===id);return{n:e.name,d:e.date,k:e.kind,done:true}}),...S.planned.map(id=>{const e=EVENTS.find(x=>x.id===id);return{n:e.name,d:e.date,k:e.kind,done:false}})].sort((a,b)=>a.d.localeCompare(b.d));
+  return `<div class="greet"><div class="eyebrow">Skills</div><h1>What you know, <em>and what's next</em></h1></div>
+  <div class="cols"><div>
+  <div class="stats"><div class="stat"><b>${learned.size}</b><span>skills learned</span></div><div class="stat"><b>${learning.size}</b><span>in progress</span></div><div class="stat"><b>${S.past.length+S.done.length}</b><span>things done</span></div></div>
+  <section><div class="sechead"><h2>Progress by area</h2></div><div class="areas">${show.map(a=>{const x=areas[a];const p=Math.round(x.have/x.tot*100),q=Math.round((x.have+x.doing)/x.tot*100);
+    return `<div class="area"><div class="t"><b style="font-weight:600">${a}</b><span>${lvl(p)} · ${x.have}/${x.tot} skills</span></div><div class="bar"><i style="width:${q}%;opacity:.35;position:absolute"></i><i style="width:${p}%;position:relative"></i><b style="left:33.3%"></b><b style="left:66.6%"></b></div><div class="ticks"><span>BEGINNER</span><span>INTERMEDIATE</span><span>ADVANCED</span></div></div>`}).join("")}</div></section>
+  </div><div>
+  <section class="first"><div class="sechead"><h2>Skills learned</h2></div><div class="taglist">${[...learned].map(t=>`<span class="tag">✓ ${t}</span>`).join("")||'<span class="sub">Nothing yet. Mark an event completed to add its skills.</span>'}</div></section>
+  <section><div class="sechead"><h2>Currently learning</h2></div><div class="taglist">${[...learning].map(t=>`<span class="tag new">${t}</span>`).join("")||'<span class="sub">Add an event from Discover to start.</span>'}</div></section>
+  <section><div class="sechead"><h2>Your path so far</h2></div>${timeline.length?`<div class="path">${timeline.map(s=>`<div class="step ${s.done?"doneS":""}"><h4>${esc(s.n)}</h4><p>${s.k} · ${fmtD(parseD(s.d))} · ${s.done?"Completed":"Upcoming"}</p></div>`).join("")}</div>`:'<span class="sub">Your timeline starts with your first event.</span>'}</section>
+  </div></div>`;
+}
+function vPortfolio(){
+  const items=[...S.past,...S.done.map(id=>{const e=EVENTS.find(x=>x.id===id);return{name:e.name,kind:e.kind,date:e.date,tags:e.tags,role:e.kind==="Hackathon"?"Team member":"Participant",note:`${e.kind} by ${e.org}.`}})].sort((a,b)=>b.date.localeCompare(a.date));
+  const p=S.profile;
+  const summary=`I'm a ${p.year} ${p.branch} student${p.college?` at ${p.college}`:""}.\n${items.length?`Recently I:\n${items.map(i=>`• ${i.kind==="Project"?"Built":"Completed"} ${i.name} (${i.tags.slice(0,3).join(", ")})`).join("\n")}`:"I'm just getting started."}\nNext up: ${S.planned.map(id=>EVENTS.find(e=>e.id===id)?.name).filter(Boolean).join(", ")||"exploring new workshops"}.`;
+  return `<div class="greet"><div class="eyebrow">Portfolio</div><h1>Built automatically, <em>as you grow</em></h1><p class="sub">Every completed event or project lands here.</p></div>
+  <div class="cols wide-left"><div><div class="cards">${items.length?items.map(i=>`<article class="pcard"><div class="kind">${esc(i.kind)} · ${esc(i.role)}</div><div class="top2"><h3>${esc(i.name)}</h3><time>${fmtD(parseD(i.date))}</time></div><p>${esc(i.note)}</p><div class="taglist">${i.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div></article>`).join(""):'<div class="empty">Nothing here yet.<br>Mark an event completed and it appears here.</div>'}</div></div>
+  <div><section class="first"><div class="sechead"><h2>LinkedIn-ready summary</h2><button class="link" id="copyBtn">Copy</button></div><div class="share" id="shareTxt">${esc(summary)}</div></section></div></div>`;
+}
+function vProfile(){
+  const p=S.profile;
+  const tt=[1,2,3,4,5,6,0].filter(d=>(S.tt[d]||[]).length).map(d=>`<div><div class="eyebrow" style="margin-bottom:4px">${DAYNAMES[d]}</div>${S.tt[d].map((c,i)=>`<div class="ttrow"><span>${esc(c[2])}</span><span class="tm">${c[0]}–${c[1]}</span><button class="rm" data-deltt="${d}|${i}" aria-label="Remove ${esc(c[2])}">${svg("trash")}</button></div>`).join("")}</div>`).join("");
+  const ex=S.exams.map((x,i)=>`<div class="ttrow"><span>${esc(x.name)}</span><span class="tm">${fmtD(parseD(x.date))}</span><button class="rm" data-delex="${i}" aria-label="Remove ${esc(x.name)}">${svg("trash")}</button></div>`).join("");
+  return `<div class="greet"><div class="eyebrow">Profile</div><h1>Tune your <em>recommendations</em></h1><p class="sub">Changes update your matches and your week straight away.</p></div>
+  <div class="cols"><div>
+  <div class="card">
+    <div class="two"><div class="field"><label for="pname">Name</label><input id="pname" type="text" value="${esc(p.name)}"></div>
+    <div class="field"><label for="pcollege">College or school</label><input id="pcollege" type="text" value="${esc(p.college)}"></div></div>
+    <div class="two"><div class="field"><label for="pbranch">Branch / department</label><select id="pbranch">${["CSE","AI & DS","ECE","EEE","Mechanical","Civil","Other"].map(b=>`<option ${b===p.branch?"selected":""}>${b}</option>`).join("")}</select></div>
+    <div class="field"><label for="pyear">Year</label><select id="pyear">${["1st year","2nd year","3rd year","4th year"].map(b=>`<option ${b===p.year?"selected":""}>${b}</option>`).join("")}</select></div></div>
+    <div class="field"><label>Interests</label><div class="wrap">${INTERESTS.map(x=>`<button class="chip" data-int="${x}" aria-pressed="${p.interests.includes(x)}">${x}</button>`).join("")}</div></div>
+    <div class="two"><div class="field"><div class="rangeval"><label for="pgrowth">Growth hours per week</label><b id="gv">${p.growth}h</b></div><input id="pgrowth" type="range" min="2" max="20" value="${p.growth}"></div>
+    <div class="field"><div class="rangeval"><label for="pme">Protected me-time per week</label><b id="mv">${p.me}h</b></div><input id="pme" type="range" min="4" max="30" value="${p.me}"></div></div>
+  </div>
+  <section><div class="card">${S.confirmOut?`<p style="margin:0">Sign out and delete your profile, timetable and progress from this browser? This can't be undone.</p><div class="actions"><button class="btn danger" id="outYes">Yes, sign out</button><button class="btn" id="outNo">Cancel</button></div>`:`${CLOUD&&USER?`<div><b style="font-weight:600">Signed in as ${esc(USER.email||p.name)}</b><p class="sub" style="margin-top:2px;font-size:13px">Synced to your account. Sign in on any phone or laptop to see the same plan. <span id="syncState" class="syncst">All changes synced</span></p></div>`:`<div><b style="font-weight:600">Signed in as ${esc(p.name)}</b><p class="sub" style="margin-top:2px;font-size:13px">Your data is saved in this browser only. Someone else on another device gets their own fresh Equigrow.</p></div>`}<button class="btn" id="outBtn">Sign out</button>`}</div></section>
+  </div><div>
+  <section class="first"><div class="sechead"><h2>Class timetable</h2><span class="eyebrow">${hrs(classHours())}h / week</span></div>
+  <div class="areas">${tt||'<span class="sub">No classes yet. Add them by hand or upload a photo or PDF of your timetable.</span>'}
+   ${ttAdder()}</div></section>
+  <section><div class="sechead"><h2>Exams</h2></div><div class="areas">${ex||'<span class="sub">Add exam dates and Equigrow will keep the days around them clear.</span>'}
+   <form id="exForm" class="ttform ex"><input id="exdate" type="date" aria-label="Exam date" required><input id="exname" type="text" placeholder="Exam name" aria-label="Exam name" required><button class="btn primary" type="submit">Add exam</button></form></div></section>
+  </div></div>`;
+}
+
+
+/* ---------- timetable: manual + photo/PDF upload ---------- */
+let TT_MODE="manual",TT_DRAFT=null,TT_BUSY=false,TT_ERR="",TT_FILE="",TT_REPLACE=false;
+const DAYKEY={mon:1,tue:2,wed:3,thu:4,fri:5,sat:6,sun:0};
+function ttAdder(){
+  const seg=`<div class="seg" role="group" aria-label="How to add classes"><button type="button" data-ttmode="manual" aria-pressed="${TT_MODE==="manual"}">Add manually</button><button type="button" data-ttmode="upload" aria-pressed="${TT_MODE==="upload"}">Upload photo / PDF</button></div>`;
+  if(TT_MODE==="manual")return seg+`<form id="ttForm" class="ttform"><select id="tday" aria-label="Day">${[1,2,3,4,5,6,0].map(d=>`<option value="${d}">${DAYNAMES[d].slice(0,3)}</option>`).join("")}</select>
+   <input id="tstart" type="time" value="09:00" aria-label="Start time" required><input id="tend" type="time" value="10:00" aria-label="End time" required>
+   <input id="tsub" type="text" placeholder="Subject" aria-label="Subject" required><button class="btn primary" type="submit">Add class</button></form>`;
+  if(!CLOUD)return seg+`<p class="sub" style="margin:0">Uploading a timetable works in the hosted version when you're signed in. For now, add classes manually.</p>`;
+  if(TT_BUSY)return seg+`<div class="drop busy"><div class="spin" aria-hidden="true"></div><b>Reading ${esc(TT_FILE)}…</b><span class="sub">Finding days, times and subjects. This takes about 10–30 seconds.</span></div>`;
+  if(TT_DRAFT){
+    const on=TT_DRAFT.filter(r=>r.on).length;
+    return seg+`<div class="review"><div class="rvhead"><b>Found ${TT_DRAFT.length} class${TT_DRAFT.length===1?"":"es"} in ${esc(TT_FILE)}</b><span class="sub">Check them and fix anything that's wrong before adding.</span></div>
+    <div class="rvrows">${TT_DRAFT.map((r,i)=>`<div class="rvrow${r.on?"":" off"}"><input type="checkbox" data-rowchk="${i}" ${r.on?"checked":""} aria-label="Include this class">
+      <select data-row="${i}" data-f="day" aria-label="Day">${[1,2,3,4,5,6,0].map(d=>`<option value="${d}" ${d===r.day?"selected":""}>${DAYNAMES[d].slice(0,3)}</option>`).join("")}</select>
+      <input type="time" data-row="${i}" data-f="start" value="${r.start}" aria-label="Start time"><input type="time" data-row="${i}" data-f="end" value="${r.end}" aria-label="End time">
+      <input type="text" class="rvsub" data-row="${i}" data-f="subject" value="${esc(r.subject)}" aria-label="Subject"></div>`).join("")}</div>
+    ${Object.keys(S.tt).length?`<label class="chk"><input type="checkbox" id="ttReplace" ${TT_REPLACE?"checked":""}> Replace my current timetable instead of adding to it</label>`:""}
+    <div class="actions"><button type="button" class="btn primary" id="ttAdd" ${on?"":"disabled"}>Add ${on} class${on===1?"":"es"}</button><button type="button" class="btn" id="ttDiscard">Discard</button></div></div>`;
+  }
+  return seg+`<label class="drop" for="ttFile"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+    <b>Choose a photo or PDF of your timetable</b><span class="sub">JPG, PNG or PDF, up to 10 MB. A clear, straight photo works best. You'll review everything before it's added.</span>
+    <input id="ttFile" type="file" accept="image/*,application/pdf" hidden></label>${TT_ERR?`<p class="formerr">${esc(TT_ERR)}</p>`:""}`;
+}
+const fileToB64=file=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(file)});
+const normTime=t=>{const m=String(t||"").trim().match(/^(\d{1,2})[:.](\d{2})\s*(am|pm)?$/i);if(!m)return null;let h=+m[1];const mi=+m[2],ap=(m[3]||"").toLowerCase();if(ap==="pm"&&h<12)h+=12;if(ap==="am"&&h===12)h=0;if(h>23||mi>59)return null;return `${String(h).padStart(2,"0")}:${String(mi).padStart(2,"0")}`};
+async function readTimetableFile(file){
+  TT_ERR="";
+  if(!/^image\/|^application\/pdf$/.test(file.type)){TT_ERR="That file type isn't supported. Use a JPG, PNG or PDF.";render(true);return}
+  if(file.size>10*1024*1024){TT_ERR="That file is over 10 MB. Try a smaller photo or a screenshot of the timetable.";render(true);return}
+  TT_BUSY=true;TT_FILE=file.name;render(true);
+  try{
+    const AI=await import(fb.base+"firebase-ai.js");
+    const ai=AI.getAI(fb.app,{backend:new AI.GoogleAIBackend()});
+    const Sc=AI.Schema;
+    const schema=Sc.object({properties:{classes:Sc.array({items:Sc.object({properties:{
+      day:Sc.string({description:"Three-letter weekday: Mon, Tue, Wed, Thu, Fri, Sat or Sun"}),
+      start:Sc.string({description:"Start time, 24-hour HH:MM"}),
+      end:Sc.string({description:"End time, 24-hour HH:MM"}),
+      subject:Sc.string({description:"Short subject name, e.g. 'Calculus' or 'Physics Lab'"})}})})}});
+    const model=AI.getGenerativeModel(ai,{model:"gemini-2.5-flash",generationConfig:{responseMimeType:"application/json",responseSchema:schema,temperature:0}});
+    const prompt=`This is a student's weekly class timetable (a photo, screenshot or PDF). Extract every class session.
+For each session give the weekday (Mon-Sun), start and end time in 24-hour HH:MM, and the subject.
+- Timetables are often a grid: days down the side and periods/times across the top (or the reverse). Use the period header times for each cell.
+- If cells contain course codes and there is a legend/key mapping codes to names, use the readable name (you may keep the code in brackets).
+- Afternoon times written like 1:30 or 2.10 are PM: convert to 13:30 / 14:10.
+- If the same subject fills consecutive periods (e.g. a lab), merge them into one session covering the whole span.
+- Skip breaks, lunch, free/library periods and empty cells.
+Return an empty list if this is not a timetable.`;
+    const res=await model.generateContent([prompt,{inlineData:{mimeType:file.type,data:await fileToB64(file)}}]);
+    const data=JSON.parse(res.response.text());
+    const rows=(data.classes||[]).map(c=>({day:DAYKEY[String(c.day||"").slice(0,3).toLowerCase()],start:normTime(c.start),end:normTime(c.end),subject:String(c.subject||"").trim(),on:true}))
+      .filter(r=>r.day!==undefined&&r.start&&r.end&&r.subject&&mins(r.end)>mins(r.start))
+      .sort((a,b)=>((a.day+6)%7)-((b.day+6)%7)||mins(a.start)-mins(b.start));
+    if(!rows.length){TT_ERR="No classes were found in that file. Try a clearer photo, or add your classes manually.";TT_DRAFT=null}
+    else TT_DRAFT=rows;
+  }catch(e){
+    console.warn(e);const m=String(e&&(e.code||e.message)||"");
+    TT_ERR=/api-not-enabled|firebasevertexai/.test(m)?"Timetable reading isn't switched on yet. In the Firebase console, open AI Logic → Get started → choose the Gemini Developer API, then try again in a few minutes."
+      :/quota|429|resource-exhausted/i.test(m)?"The free reading limit is used up for now. Try again later, or add classes manually."
+      :"Couldn't read that file. Try a clearer photo or a PDF, or add your classes manually.";
+    TT_DRAFT=null;
+  }
+  TT_BUSY=false;render(true);
+}
+function addDraftClasses(){
+  const rows=TT_DRAFT.filter(r=>r.on&&r.subject.trim()&&normTime(r.start)&&normTime(r.end)&&mins(r.end)>mins(r.start));
+  if(TT_REPLACE)S.tt={};
+  let added=0;
+  rows.forEach(r=>{const list=(S.tt[r.day]=S.tt[r.day]||[]);if(!list.some(c=>c[0]===r.start&&c[2].toLowerCase()===r.subject.trim().toLowerCase())){list.push([r.start,r.end,r.subject.trim()]);added++}});
+  Object.keys(S.tt).forEach(d=>S.tt[d].sort((a,b)=>mins(a[0])-mins(b[0])));
+  TT_DRAFT=null;TT_REPLACE=false;TT_MODE="manual";toast(`${added} class${added===1?"":"es"} added to your timetable`);render(true);
+}
+
+/* ---------- render ---------- */
+const VIEWS={home:["Home",vHome],discover:["Discover",vDiscover],skills:["Skills",vSkills],portfolio:["Portfolio",vPortfolio],profile:["Profile",vProfile]};
+function render(keep){
+  const y=scrollY,gate=CLOUD&&AUTH_STATE!=="in",signed=!gate&&!!S.profile;
+  document.body.classList.toggle("noside",!signed);
+  $("nav.bottom").hidden=!signed;$("#topbar").hidden=!signed;
+  $("#note").textContent=CLOUD?"Events shown are examples · Synced to your account":"Events shown are examples · Your data stays in this browser";
+  $("#main").innerHTML=gate?vAuth():signed?`<div class="view"${keep?' style="animation:none"':""}>${VIEWS[S.view][1]()}</div>`:vOnboard();
+  $("#nav").innerHTML=Object.entries(VIEWS).map(([k,[l]])=>`<button data-go="${k}" ${S.view===k?'aria-current="page"':""}>${svg(k)}<span>${l}</span></button>`).join("");
+  scrollTo(0,keep?y:0);if(!gate)save();
+}
+document.addEventListener("click",ev=>{
+  const b=ev.target.closest("button");if(!b)return;const d=b.dataset;
+  if(d.oint){b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")==="true"?"false":"true");return}
+  if(d.demo){Object.assign(S,structuredClone(SAMPLE));S.view="home";toast("Sample profile loaded. Sign out any time from Profile.");render();return}
+  if(d.ttmode){TT_MODE=d.ttmode;TT_ERR="";render(true);return}
+  if(b.id==="ttAdd"){addDraftClasses();return}
+  if(b.id==="ttDiscard"){TT_DRAFT=null;TT_ERR="";render(true);return}
+  if(d.go){S.view=d.go;render();return}
+  if(d.day){S.day=+d.day;render(true);return}
+  if(d.filter){S.filter=d.filter;render(true);return}
+  if(d.plan){S.planned.push(d.plan);toast("Added to your plan");render(true);return}
+  if(d.unplan){S.planned=S.planned.filter(x=>x!==d.unplan);toast("Removed from your plan");render(true);return}
+  if(d.save){S.saved=S.saved.includes(d.save)?S.saved.filter(x=>x!==d.save):[...S.saved,d.save];toast(S.saved.includes(d.save)?"Saved for later":"Removed from saved");render(true);return}
+  if(d.done){S.planned=S.planned.filter(x=>x!==d.done);S.done.push(d.done);toast("Completed. Skills added to your profile");render(true);return}
+  if(d.int){const i=S.profile.interests;if(i.includes(d.int)&&i.length===1){toast("Keep at least one interest");return}S.profile.interests=i.includes(d.int)?i.filter(x=>x!==d.int):[...i,d.int];render(true);return}
+  if(d.deltt){const [day,i]=d.deltt.split("|").map(Number);S.tt[day].splice(i,1);if(!S.tt[day].length)delete S.tt[day];toast("Class removed");render(true);return}
+  if(d.delex){S.exams.splice(+d.delex,1);toast("Exam removed");render(true);return}
+  if(b.id==="bellBtn"){S.view="home";render();setTimeout(()=>$("#nudgeSec")?.scrollIntoView({behavior:"smooth",block:"center"}),50);return}
+  if(b.id==="themeBtn"){const r=document.documentElement;const cur=r.dataset.theme||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");r.dataset.theme=cur==="dark"?"light":"dark";try{localStorage.setItem("equigrow.theme",r.dataset.theme)}catch(e){}return}
+  if(b.id==="outBtn"){if(CLOUD&&USER){clearTimeout(syncT);pushCloud().finally(()=>{try{localStorage.removeItem(cacheKey())}catch(e){}fb.auth.signOut();toast("Signed out")});return}S.confirmOut=true;render(true);return}
+  if(b.id==="gBtn"){fb.auth.google().catch(e=>showAuthErr(authMsg(e)));return}
+  if(b.id==="swapAuth"){AUTH_MODE=AUTH_MODE==="signup"?"signin":"signup";AUTH_ERR="";render();return}
+  if(b.id==="forgotBtn"){const em=$("#aemail").value.trim();if(!em){showAuthErr("Type your email above first, then tap Forgot password.");return}
+    fb.auth.sendPasswordResetEmail(em).then(()=>{showAuthErr("");toast("Password reset link sent to "+em)}).catch(e=>showAuthErr(authMsg(e)));return}
+  if(b.id==="outNo"){S.confirmOut=false;render(true);return}
+  if(b.id==="outYes"){S=fresh();try{localStorage.removeItem(KEY)}catch(e){}render();toast("Signed out");return}
+  if(b.id==="copyBtn"){const t=$("#shareTxt").textContent;const sel=()=>{const r=document.createRange();r.selectNodeContents($("#shareTxt"));const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Text selected. Press Ctrl+C to copy")};
+    try{navigator.clipboard.writeText(t).then(()=>toast("Copied to clipboard"),sel)}catch(e){sel()}return}
+});
+document.addEventListener("submit",ev=>{
+  ev.preventDefault();const f=ev.target;
+  if(f.id==="authForm"){
+    const em=$("#aemail").value.trim(),pw=$("#apass").value,up=AUTH_MODE==="signup",btn=$("#authSubmit");
+    if(!em||!pw){showAuthErr("Enter your email and password.");return}
+    if(up&&pw.length<6){showAuthErr("Use at least 6 characters for your password.");return}
+    btn.disabled=true;btn.textContent=up?"Creating account…":"Signing in…";
+    (up?fb.auth.createUserWithEmailAndPassword(em,pw):fb.auth.signInWithEmailAndPassword(em,pw))
+      .catch(e=>{showAuthErr(authMsg(e));btn.disabled=false;btn.textContent=up?"Create account":"Sign in"});
+    return}
+  if(f.id==="onbForm"){
+    const name=$("#oname").value.trim(),ints=[...document.querySelectorAll("[data-oint][aria-pressed=true]")].map(x=>x.dataset.oint);
+    const err=$("#oerr");
+    if(!name||!ints.length){err.textContent=!name?"Enter your name to continue.":"Pick at least one interest so Equigrow can recommend events.";err.hidden=false;return}
+    S.profile={name,college:$("#ocollege").value.trim(),branch:$("#obranch").value,year:$("#oyear").value,interests:ints,growth:+$("#ogrowth").value,me:+$("#ome").value};
+    S.view="profile";toast(`Welcome, ${name}! Add your timetable next.`);render();return}
+  if(f.id==="ttForm"){
+    const day=+$("#tday").value,s=$("#tstart").value,e=$("#tend").value,sub=$("#tsub").value.trim();
+    if(!sub||mins(e)<=mins(s)){toast("End time must be after start time");return}
+    (S.tt[day]=S.tt[day]||[]).push([s,e,sub]);S.tt[day].sort((a,b)=>mins(a[0])-mins(b[0]));toast(`${sub} added on ${DAYNAMES[day]}`);render(true);$("#tday").value=day;return}
+  if(f.id==="exForm"){
+    const date=$("#exdate").value,name=$("#exname").value.trim();if(!date||!name)return;
+    S.exams.push({date,name});S.exams.sort((a,b)=>a.date.localeCompare(b.date));toast("Exam added");render(true);return}
+});
+document.addEventListener("input",ev=>{
+  const t=ev.target;
+  if(t.dataset&&t.dataset.row!==undefined&&t.dataset.f&&t.dataset.f!=="day"){TT_DRAFT[+t.dataset.row][t.dataset.f]=t.value;return}
+  if(t.id==="q"){S.q=t.value;const pos=t.selectionStart;render(true);const n=$("#q");n.focus();n.setSelectionRange(pos,pos);return}
+  if(t.id==="ogrowth"){$("#ogv").textContent=t.value+"h";return}
+  if(t.id==="ome"){$("#omv").textContent=t.value+"h";return}
+  if(t.id==="pname"){S.profile.name=t.value;save();return}
+  if(t.id==="pcollege"){S.profile.college=t.value;save();return}
+  if(t.id==="pgrowth"){S.profile.growth=+t.value;$("#gv").textContent=t.value+"h";save();return}
+  if(t.id==="pme"){S.profile.me=+t.value;$("#mv").textContent=t.value+"h";save();return}
+});
+document.addEventListener("change",ev=>{const t=ev.target;
+  if(t.id==="ttFile"&&t.files&&t.files[0]){readTimetableFile(t.files[0]);return}
+  if(t.dataset&&t.dataset.rowchk!==undefined){TT_DRAFT[+t.dataset.rowchk].on=t.checked;render(true);return}
+  if(t.id==="ttReplace"){TT_REPLACE=t.checked;return}
+  if(t.dataset&&t.dataset.row!==undefined&&t.dataset.f==="day"){TT_DRAFT[+t.dataset.row].day=+t.value;return}if(t.id==="pbranch"){S.profile.branch=t.value;save()}if(t.id==="pyear"){S.profile.year=t.value;save()}});
+try{const th=localStorage.getItem("equigrow.theme");if(th)document.documentElement.dataset.theme=th}catch(e){}
+function showAuthErr(m){AUTH_ERR=m;const el=$("#aerr");if(el){el.textContent=m;el.hidden=!m}}
+render();
+if(CLOUD)initCloud();
+</script>
+</body></html>
