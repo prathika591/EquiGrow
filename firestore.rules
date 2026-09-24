@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Each student can only read and write their own profile, timetable and progress.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Events: every signed-in student can read; only the admin can add, edit or delete.
+    match /events/{eventId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+                   && request.auth.token.email == "prathikathamizharasu@gmail.com";
+    }
+
+    // Bulletins: every signed-in student can read; only the admin can post or delete.
+    match /bulletins/{bulletinId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+                   && request.auth.token.email == "prathikathamizharasu@gmail.com";
+    }
+  }
+}
